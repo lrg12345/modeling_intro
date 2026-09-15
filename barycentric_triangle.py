@@ -1,5 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def generate_triangle(width=800, height=700, border=100):
@@ -45,7 +45,6 @@ def generate_triangle(width=800, height=700, border=100):
 
     for y_coordinate in range(height):
         for x_coordinate in range(width):
-
             pixel_point = np.array([x_coordinate, y_coordinate])
 
             vector_0 = data_vertex - analytical_vertex
@@ -60,13 +59,9 @@ def generate_triangle(width=800, height=700, border=100):
 
             denominator = dot_00 * dot_11 - dot_01 * dot_01
 
-            barycentric_u = (
-                dot_11 * dot_02 - dot_01 * dot_12
-            ) / denominator
+            barycentric_u = (dot_11 * dot_02 - dot_01 * dot_12) / denominator
 
-            barycentric_v = (
-                dot_00 * dot_12 - dot_01 * dot_02
-            ) / denominator
+            barycentric_v = (dot_00 * dot_12 - dot_01 * dot_02) / denominator
 
             point_is_inside = (
                 barycentric_u >= 0
@@ -75,30 +70,17 @@ def generate_triangle(width=800, height=700, border=100):
             )
 
             if point_is_inside:
+                distance_to_analytical = np.linalg.norm(pixel_point - analytical_vertex)
 
-                distance_to_analytical = np.linalg.norm(
-                    pixel_point - analytical_vertex
-                )
+                distance_to_physical = np.linalg.norm(pixel_point - physical_vertex)
 
-                distance_to_physical = np.linalg.norm(
-                    pixel_point - physical_vertex
-                )
+                distance_to_data = np.linalg.norm(pixel_point - data_vertex)
 
-                distance_to_data = np.linalg.norm(
-                    pixel_point - data_vertex
-                )
+                red_intensity = 1.0 - distance_to_analytical / maximum_distance
 
-                red_intensity = (
-                    1.0 - distance_to_analytical / maximum_distance
-                )
+                green_intensity = 1.0 - distance_to_physical / maximum_distance
 
-                green_intensity = (
-                    1.0 - distance_to_physical / maximum_distance
-                )
-
-                blue_intensity = (
-                    1.0 - distance_to_data / maximum_distance
-                )
+                blue_intensity = 1.0 - distance_to_data / maximum_distance
 
                 pixel_color = np.array(
                     [
@@ -166,26 +148,15 @@ def plot_point(
     nonnegative and add up to 1.
     """
 
-    total_weight = (
-        analytical_weight
-        + physical_weight
-        + data_weight
-    )
+    total_weight = analytical_weight + physical_weight + data_weight
 
     if not np.isclose(total_weight, 1.0):
         raise ValueError(
-            "Analytical, physical, and data-driven weights "
-            "must add up to 1."
+            "Analytical, physical, and data-driven weights must add up to 1."
         )
 
-    if (
-        analytical_weight < 0
-        or physical_weight < 0
-        or data_weight < 0
-    ):
-        raise ValueError(
-            "Project weights cannot be negative."
-        )
+    if analytical_weight < 0 or physical_weight < 0 or data_weight < 0:
+        raise ValueError("Project weights cannot be negative.")
 
     project_position = (
         analytical_weight * analytical_vertex
@@ -215,7 +186,8 @@ def plot_point(
     )
 
     plt.show()
-    
+
+
 if __name__ == "__main__":
     import sys
 
