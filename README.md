@@ -188,6 +188,35 @@ Most importantly:
 - Improve it in small steps.
 - Preserve behavior while improving readability, reuse, and portability.
 
+# Using the Library
+
+The triangle can be generated and used through Python: 
+
+import barycentric_triangle as bt 
+
+triangle = bt.generate_triangle() 
+
+bt.plot_point( 
+  triangle, 
+  analytical_weight=0.4, 
+  physical_weight=0.2, 
+  data_weight=0.4, 
+)
+
+The three weights represent the analytical, physical, and data-driven contributions and must be nonnegative and add up to 1.
+
+You can also inspect the available functions and their documentation with:
+
+dir(bt)
+help(bt.generate_triangle)
+help(bt.plot_point)
+
+The triangle can also be run directly from the command line if you have the environment active: 
+
+`python barycentric_triangle.py triangle.png 0.5 0.3 0.2`
+
+This would generate a triangle figure at `triangle.png` with analytical_weight 0.5, physical_weight 0.3, and data_weight 0.2.
+
 # Help Improve this repository
 
 This repository is part of an ongoing open educational resource project.
